@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#10131d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="牛马下班倒计时">
+<title>牛马下班倒计时 · 手机版</title>
+<style>
+:root{--bg:#0e111a;--panel:#191e2b;--panel2:#202638;--text:#f5f6fb;--muted:#9ba5ba;--accent:#9cf36a;--accent2:#c3ff9c;--orange:#ffb86b;--line:#30384d;--danger:#ff777e}
+*{box-sizing:border-box}html{background:var(--bg)}body{margin:0;background:radial-gradient(ellipse at 50% -15%,#28334c 0%,var(--bg) 48%);color:var(--text);font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;min-height:100vh;padding:env(safe-area-inset-top) 0 calc(82px + env(safe-area-inset-bottom))}
+button,input{font:inherit}button{cursor:pointer;border:0}
+.app{width:min(100%,520px);margin:auto;padding:14px 16px 22px}
+.top{display:flex;align-items:center;justify-content:space-between;margin:4px 2px 18px}.brand{font-weight:850;letter-spacing:.5px;font-size:17px}.brand span{color:var(--accent)}.iconbtn{width:40px;height:40px;border:1px solid var(--line);background:#1a2030;color:white;border-radius:14px;font-size:18px}
+.date{color:var(--muted);font-size:12px;margin-bottom:5px}.greeting{font-size:23px;font-weight:850;letter-spacing:.3px}.greeting small{font-size:13px;color:var(--muted);font-weight:500}
+.hero{margin-top:17px;background:linear-gradient(145deg,#202a3c,#171d2b 70%);border:1px solid #354057;border-radius:26px;padding:20px 18px 17px;position:relative;overflow:hidden;box-shadow:0 16px 40px #0004}
+.hero:after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;background:#9cf36a12;right:-70px;top:-85px}
+.herohead{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1}.eyebrow{font-size:12px;color:var(--muted)}.status{font-size:11px;color:var(--accent);background:#9cf36a18;border:1px solid #9cf36a35;padding:6px 10px;border-radius:20px}
+.clock{font-size:clamp(43px,13vw,64px);font-weight:900;letter-spacing:1px;font-variant-numeric:tabular-nums;margin:10px 0 1px;line-height:1.12;position:relative;z-index:1}.subclock{font-size:13px;color:var(--muted);position:relative;z-index:1}
+.progress-wrap{height:9px;background:#0d1220;border-radius:20px;margin:19px 0 9px;overflow:hidden}.progress{height:100%;width:0;background:linear-gradient(90deg,#79dc54,#c5ff8c);border-radius:20px;transition:width .5s}
+.progresslabels{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:13px}.metric{background:var(--panel);border:1px solid var(--line);border-radius:19px;padding:15px 14px}.metric .label{font-size:12px;color:var(--muted)}.metric .value{font-size:25px;font-weight:850;margin-top:5px;font-variant-numeric:tabular-nums}.metric .hint{font-size:11px;color:#78849b;margin-top:3px}.money{color:var(--accent)}
+.sectiontitle{display:flex;align-items:center;justify-content:space-between;margin:23px 2px 11px}.sectiontitle strong{font-size:15px}.sectiontitle span{font-size:11px;color:var(--muted)}
+.petcard{background:linear-gradient(135deg,#252d40,#1a2030);border:1px solid #38435b;border-radius:23px;padding:15px;display:flex;align-items:center;gap:14px;position:relative;overflow:hidden}
+.pet{width:88px;height:88px;border-radius:24px;background:linear-gradient(145deg,#d5ffad,#83d95c);display:grid;place-items:center;font-size:51px;flex-shrink:0;box-shadow:inset 0 -7px 0 #4c9b3540;position:relative}
+.pet:after{content:"";position:absolute;width:10px;height:10px;border-radius:50%;background:#fff9;top:12px;right:15px}
+.petinfo{min-width:0;flex:1}.petname{font-weight:850;font-size:16px}.petdesc{font-size:12px;color:var(--muted);margin-top:4px}.xpbar{height:6px;background:#101624;border-radius:10px;margin:10px 0 5px;overflow:hidden}.xpfill{height:100%;width:0;background:var(--accent);border-radius:10px}.xptext{font-size:10px;color:#8793a9;display:flex;justify-content:space-between}.petactions{display:flex;gap:7px;margin-top:10px}.mini{background:#303b50;color:#f4f6fb;border-radius:11px;padding:8px 10px;font-size:11px}.mini.primary{background:var(--accent);color:#172113;font-weight:800}
+.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.quick button{background:var(--panel);border:1px solid var(--line);color:var(--text);border-radius:16px;padding:13px 5px;font-size:12px}.quick b{display:block;font-size:21px;margin-bottom:5px}
+.bottomnav{position:fixed;bottom:0;left:0;right:0;padding:9px 12px calc(9px + env(safe-area-inset-bottom));background:#111621ed;backdrop-filter:blur(18px);border-top:1px solid #30384d;display:flex;justify-content:center;z-index:10}.navinner{width:min(100%,520px);display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.navbtn{background:transparent;color:#7e899e;padding:6px;border-radius:13px;font-size:11px}.navbtn span{display:block;font-size:19px;margin-bottom:2px}.navbtn.active{color:var(--accent);background:#9cf36a12}
+.panel{display:none}.panel.active{display:block}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:16px;margin-top:12px}.card h3{font-size:14px;margin:0 0 13px}.field{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid #2b3346}.field:last-child{border:0}.field label{font-size:13px;color:#dce1ed}.field input{width:125px;max-width:48%;background:#101624;color:white;border:1px solid #3a455d;border-radius:10px;padding:9px;text-align:right;outline:none}.field input:focus{border-color:var(--accent)}.field .suffix{font-size:11px;color:var(--muted)}
+.primarybtn{width:100%;background:var(--accent);color:#15200f;border-radius:14px;padding:13px;font-weight:850;margin-top:14px}.ghostbtn{width:100%;background:#2b3448;color:#e7ebf5;border-radius:14px;padding:12px;margin-top:9px}
+.statsgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.statbox{background:#111725;border-radius:15px;padding:13px}.statbox span{font-size:11px;color:var(--muted)}.statbox b{display:block;font-size:22px;margin-top:4px}
+.toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom));transform:translate(-50%,20px);background:#efffe5;color:#172113;padding:11px 16px;border-radius:14px;font-size:13px;font-weight:750;opacity:0;transition:.25s;z-index:30;white-space:nowrap;pointer-events:none}.toast.show{opacity:1;transform:translate(-50%,0)}
+.overlay{display:none;position:fixed;inset:0;background:#05070bd9;z-index:20;align-items:flex-end;justify-content:center;padding:12px}.overlay.show{display:flex}.sheet{width:min(100%,520px);background:#1b2231;border:1px solid #39445c;border-radius:25px 25px 18px 18px;padding:20px;margin-bottom:env(safe-area-inset-bottom);max-height:88vh;overflow:auto}.sheethead{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.sheethead b{font-size:17px}.close{background:#30394d;color:white;border-radius:10px;width:32px;height:32px;font-size:18px}
+.empty{color:var(--muted);font-size:12px;line-height:1.7}.record{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--line);font-size:12px}.record b{color:var(--accent)}
+@media(min-width:520px){body{padding-top:18px}.app{padding-top:18px}.bottomnav{bottom:12px;border:1px solid var(--line);border-radius:20px;left:50%;right:auto;transform:translateX(-50%);width:min(calc(100% - 24px),520px)}}
+</style>
+</head>
+<body>
+<div class="app">
+ <header class="top"><div class="brand">🐮 牛马<span>下班倒计时</span></div><button class="iconbtn" id="settingsTop" aria-label="设置">⚙</button></header>
+ <main id="home" class="panel active">
+  <div class="date" id="today"></div><div class="greeting" id="greeting">今天也要加油 <small>打工人，稳住！</small></div>
+  <section class="hero">
+   <div class="herohead"><div class="eyebrow" id="clockLabel">距离下班还有</div><div class="status" id="workStatus">● 正在上班</div></div>
+   <div class="clock" id="countdown">00:00:00</div><div class="subclock" id="endText">目标下班时间 18:00</div>
+   <div class="progress-wrap"><div class="progress" id="progress"></div></div>
+   <div class="progresslabels"><span id="startLabel">09:00 开始</span><span id="progressText">今日进度 0%</span><span id="endLabel">18:00 下班</span></div>
+  </section>
+  <div class="metrics">
+   <div class="metric"><div class="label">💰 今天已经赚到</div><div class="value money" id="earned">¥0.00</div><div class="hint">按有效工作时间实时计算</div></div>
+   <div class="metric"><div class="label">⏳ 今天还要熬</div><div class="value" id="leftHours">9小时</div><div class="hint">下班就在前面</div></div>
+  </div>
+  <div class="sectiontitle"><strong>你的摸鱼搭子</strong><span id="petLevel">LV.1 新手牛马</span></div>
+  <section class="petcard">
+   <div class="pet" id="petEmoji">🐮</div>
+   <div class="petinfo"><div class="petname" id="petName">小牛马</div><div class="petdesc" id="petMood">精神饱满，陪你熬到下班！</div><div class="xpbar"><div class="xpfill" id="xpFill"></div></div><div class="xptext"><span>成长值</span><span id="xpText">0 / 100</span></div><div class="petactions"><button class="mini primary" id="feedPet">🍎 喂它一下</button><button class="mini" id="patPet">摸摸头</button></div></div>
+  </section>
+  <div class="sectiontitle"><strong>快捷操作</strong><span>照顾好自己</span></div>
+  <div class="quick">
+   <button id="breakBtn"><b>☕</b>开始休息</button><button id="finishBtn"><b>🎉</b>提前下班</button><button id="quoteBtn"><b>💬</b>打工语录</button>
+  </div>
+  <div class="sectiontitle"><strong>今日小目标</strong><span id="goalStatus">完成 0 / 3</span></div>
+  <div class="card" id="goals">
+   <div class="field"><label><input type="checkbox" class="goal" style="width:auto;max-width:none;margin-right:8px">喝一杯水</label><span class="suffix">💧</span></div>
+   <div class="field"><label><input type="checkbox" class="goal" style="width:auto;max-width:none;margin-right:8px">站起来活动一下</label><span class="suffix">🧍</span></div>
+   <div class="field"><label><input type="checkbox" class="goal" style="width:auto;max-width:none;margin-right:8px">认真夸自己一次</label><span class="suffix">❤️</span></div>
+  </div>
+ </main>
+ <main id="stats" class="panel">
+  <div class="greeting">打工战绩 <small>每一分努力都值得</small></div>
+  <div class="card"><h3>📊 今日收入概览</h3><div class="statsgrid"><div class="statbox"><span>今日累计收入</span><b class="money" id="statEarned">¥0.00</b></div><div class="statbox"><span>有效工作时长</span><b id="statHours">0.0h</b></div><div class="statbox"><span>时薪</span><b id="statRate">¥0</b></div><div class="statbox"><span>本周累计</span><b id="weekEarned">¥0.00</b></div></div></div>
+  <div class="card"><h3>📅 每日记录</h3><div id="history"><div class="empty">今天开始努力，明天就有战绩啦。</div></div></div>
+  <button class="ghostbtn" id="clearHistory">清空历史记录</button>
+ </main>
+ <main id="settings" class="panel">
+  <div class="greeting">工作设置 <small>按你的实际情况来</small></div>
+  <div class="card"><h3>🕘 工作时间</h3>
+   <div class="field"><label>上班时间</label><input type="time" id="startTime" value="09:00"></div>
+   <div class="field"><label>下班时间</label><input type="time" id="endTime" value="18:00"></div>
+   <div class="field"><label>午休 / 不计薪休息</label><div><input type="number" id="breakMinutes" min="0" max="600" value="60" style="width:76px"><span class="suffix"> 分钟</span></div></div>
+  </div>
+  <div class="card"><h3>💵 收入设置</h3>
+   <div class="field"><label>税前 / 税后时薪</label><div><span class="suffix">¥ </span><input type="number" id="hourlyRate" min="0" step="0.01" value="25"></div></div>
+   <div class="field"><label>每月工作天数（估算）</label><div><input type="number" id="workDays" min="1" max="31" value="22"><span class="suffix"> 天</span></div></div>
+  </div>
+  <div class="card"><h3>🐮 宠物设置</h3><div class="field"><label>给小伙伴起个名字</label><input type="text" id="petNameInput" maxlength="10" value="小牛马"></div><div class="field"><label>宠物形象</label><select id="petChoice" style="background:#101624;color:white;border:1px solid #3a455d;border-radius:10px;padding:9px"><option value="🐮">牛马</option><option value="🐱">猫猫</option><option value="🐸">青蛙</option><option value="🐼">熊猫</option><option value="🐻">小熊</option><option value="🐰">兔兔</option></select></div></div>
+  <button class="primarybtn" id="saveSettings">保存设置</button><button class="ghostbtn" id="resetAll">恢复默认设置</button>
+  <p class="empty" style="margin:14px 3px">数据仅保存在当前手机浏览器中。清理浏览器数据可能导致记录丢失。收入为估算值，不等同于实际工资。</p>
+ </main>
+</div>
+<nav class="bottomnav"><div class="navinner"><button class="navbtn active" data-page="home"><span>🏠</span>首页</button><button class="navbtn" data-page="stats"><span>📈</span>战绩</button><button class="navbtn" data-page="settings"><span>⚙️</span>设置</button></div></nav>
+<div class="toast" id="toast"></div>
+<div class="overlay" id="breakSheet"><div class="sheet"><div class="sheethead"><b>☕ 休息一下</b><button class="close" id="closeBreak">×</button></div><p id="breakMessage">休息不是偷懒，是为了走更远。</p><div class="statsgrid"><div class="statbox"><span>休息计时</span><b id="breakClock">00:00</b></div><div class="statbox"><span>温馨提示</span><b style="font-size:15px">喝水伸展</b></div></div><button class="primarybtn" id="endBreak">我充好电了，继续干</button></div></div>
+<script>
+(()=>{
+const $=id=>document.getElementById(id);
+const defaults={start:"09:00",end:"18:00",breakMinutes:60,rate:25,days:22,petName:"小牛马",pet:"🐮",xp:0,history:{},breakStart:null,finished:false};
+let data={...defaults,...JSON.parse(localStorage.getItem("cowClockData")||"{}")};
+data.history=data.history||{};
+let lastTen=-1, lastDate="";
+const save=()=>localStorage.setItem("cowClockData",JSON.stringify(data));
+const timeMins=s=>{let [h,m]=s.split(":").map(Number);return h*60+m};
+const money=n=>"¥"+Math.max(0,n).toFixed(2);
+const pad=n=>String(n).padStart(2,"0");
+const toast=t=>{let el=$("toast");el.textContent=t;el.classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove("show"),2100)};
+const dateKey=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+function calc(now=new Date()){
+ let start=timeMins(data.start),end=timeMins(data.end),cur=now.getHours()*60+now.getMinutes()+now.getSeconds()/60;
+ if(end<=start)end+=1440;
+ let current=cur;if(current<start&&end>=1440)current+=1440;
+ let total=Math.max(1,end-start-data.breakMinutes),elapsed=Math.max(0,Math.min(total,current-start-data.breakMinutes*Math.max(0,Math.min(1,(current-start)/(end-start)))));
+ let work=Math.max(0,Math.min(total,current-start)); 
+ // 午休按比例扣除，收入在下班前按经过时间均匀估算
+ let paid=Math.max(0,Math.min(total,current-start-Math.min(data.breakMinutes,Math.max(0,current-start)*(data.breakMinutes/Math.max(1,end-start)))));
+ let remain=Math.max(0,end-current);
+ return {start,end,current,total,elapsed,paid,remain,progress:Math.max(0,Math.min(100,(current-start)/(end-start)*100)),isBefore:current<start,isAfter:current>=end};
+}
+function update(){
+ let now=new Date(),key=dateKey(now),c=calc(now);
+ if(lastDate!==key){lastDate=key;data.finished=false;lastTen=-1;save()}
+ $("today").textContent=now.toLocaleDateString("zh-CN",{year:"numeric",month:"long",day:"numeric",weekday:"long"});
+ let h=now.getHours();$("greeting").innerHTML=(h<11?"早上好，打工人":h<14?"中午好，打工人":h<18?"下午好，打工人":"辛苦了，打工人")+" <small>今天也要照顾好自己</small>";
+ let rem=Math.max(0,Math.floor(c.remain*60));let clock=`${pad(Math.floor(rem/3600))}:${pad(Math.floor(rem%3600/60))}:${pad(rem%60)}`;
+ $("countdown").textContent=c.isAfter?"下班啦！":clock;
+ $("clockLabel").textContent=c.isAfter?"今天辛苦了":c.isBefore?"距离上班还有":"距离下班还有";
+ $("workStatus").textContent=c.isAfter?"● 已经下班":c.isBefore?"● 尚未上班": "● 正在上班";
+ $("endText").textContent=`目标下班时间 ${data.end}`;
+ $("startLabel").textContent=data.start+" 开始";$("endLabel").textContent=data.end+" 下班";
+ $("progress").style.width=c.progress+"%";$("progressText").textContent="今日进度 "+Math.round(c.progress)+"%";
+ let earned=c.isBefore?0:c.isAfter?c.total*data.rate/60:c.paid*data.rate/60;
+ if(data.finished)earned=c.total*data.rate/60;
+ $("earned").textContent=money(earned);$("leftHours").textContent=c.isAfter?"解放了":(c.remain/60).toFixed(1)+"小时";
+ $("statEarned").textContent=money(earned);$("statHours").textContent=(c.isAfter||data.finished?c.total:c.paid/60).toFixed(1)+"h";$("statRate").textContent=money(data.rate);
+ let week=Object.values(data.history).reduce((a,b)=>a+(b.earned||0),0)+earned;$("weekEarned").textContent=money(week);
+ let ten=Math.floor(earned/10);if(ten>lastTen&&lastTen>=0)toast("💰 又赚到 "+money(ten*10)+" 啦！");lastTen=ten;
+ if(c.isAfter&&!data.finished){data.finished=true;data.xp+=20;save();toast("🎉 下班啦！今天辛苦了！")}
+ if(now.getHours()===23&&now.getMinutes()===59){data.history[key]={earned,hours:c.total/60};save()}
+ renderPet();
+}
+function renderPet(){
+ let level=1+Math.floor(data.xp/100),xp=data.xp%100;
+ $("petEmoji").textContent=data.pet;$("petName").textContent=data.petName||"小牛马";$("petLevel").textContent=`LV.${level} ${level<3?"实习牛马":level<6?"熟练牛马":"资深摸鱼大师"}`;
+ $("xpFill").style.width=xp+"%";$("xpText").textContent=`${xp} / 100`;
+ $("petMood").textContent=level>=6?"你已经是摸鱼界的传说！":level>=3?"越来越熟练了，继续升级！":"精神饱满，陪你熬到下班！";
+}
+function showPage(page){document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));$(page).classList.add("active");document.querySelectorAll(".navbtn").forEach(b=>b.classList.toggle("active",b.dataset.page===page));if(page==="stats")renderHistory();if(page==="settings")loadSettings()}
+document.querySelectorAll(".navbtn").forEach(b=>b.onclick=()=>showPage(b.dataset.page));
+$("settingsTop").onclick=()=>showPage("settings");
+function loadSettings(){$("startTime").value=data.start;$("endTime").value=data.end;$("breakMinutes").value=data.breakMinutes;$("hourlyRate").value=data.rate;$("workDays").value=data.days;$("petNameInput").value=data.petName;$("petChoice").value=data.pet}
+$("saveSettings").onclick=()=>{
+ let start=$("startTime").value,end=$("endTime").value,rate=+$("hourlyRate").value,br=+$("breakMinutes").value;
+ if(!start||!end||timeMins(end)<=timeMins(start)){toast("下班时间要晚于上班时间");return}
+ if(rate<0||br<0||br>600){toast("请检查收入或休息时间");return}
+ Object.assign(data,{start,end,rate,breakMinutes:br,days:Math.max(1,+$("workDays").value||22),petName:$("petNameInput").value.trim()||"小牛马",pet:$("petChoice").value});
+ save();update();toast("设置已保存");showPage("home");
+};
+$("resetAll").onclick=()=>{if(confirm("确定恢复默认设置吗？历史记录也会清空。")){data={...defaults,history:{}};save();loadSettings();update();toast("已恢复默认")}};
+$("feedPet").onclick=()=>{data.xp+=8;save();renderPet();toast("🍎 小伙伴开心地吃掉了！成长值 +8")};
+$("patPet").onclick=()=>{data.xp+=3;save();renderPet();toast("摸摸头，成长值 +3 ❤️")};
+$("quoteBtn").onclick=()=>{let q=["工资是生活的底气，不是生活的全部。","今天少一点内耗，多一点下班。","你不是机器，累了就歇一会儿。","上班为了生活，生活不只是上班。","今天的你，已经很努力了。"];toast(q[Math.floor(Math.random()*q.length)])};
+$("breakBtn").onclick=()=>{$("breakSheet").classList.add("show");data.breakStart=Date.now();save();};
+$("closeBreak").onclick=$("endBreak").onclick=()=>{$("breakSheet").classList.remove("show");data.breakStart=null;save();toast("继续加油，记得劳逸结合")};
+$("finishBtn").onclick=()=>{if(confirm("确定记录为今天提前下班吗？")){data.finished=true;let c=calc();data.history[dateKey(new Date())]={earned:c.total*data.rate/60,hours:c.total/60};save();update();toast("提前下班成功！今天辛苦啦 🎉")}};
+function renderHistory(){let entries=Object.entries(data.history).sort((a,b)=>b[0].localeCompare(a[0])).slice(0,14);$("history").innerHTML=entries.length?entries.map(([d,v])=>`<div class="record"><span>${d} · ${(v.hours||0).toFixed(1)} 小时</span><b>${money(v.earned||0)}</b></div>`).join(""):'<div class="empty">还没有历史记录。每天的收入会在当天结束时保存。</div>'}
+$("clearHistory").onclick=()=>{if(confirm("确定清空所有历史记录吗？")){data.history={};save();renderHistory();update();toast("历史记录已清空")}};
+document.querySelectorAll(".goal").forEach(el=>el.onchange=()=>{let n=[...document.querySelectorAll(".goal")].filter(x=>x.checked).length;$("goalStatus").textContent=`完成 ${n} / 3`;if(n===3)toast("今日小目标全部完成！真棒 ❤️")});
+setInterval(()=>{update();if(data.breakStart){let s=Math.floor((Date.now()-data.breakStart)/1000);$("breakClock").textContent=pad(Math.floor(s/60))+":"+pad(s%60)}},1000);
+loadSettings();update();
+})();
+</script>
+</body>
+</html>
